@@ -7,11 +7,11 @@ APP_NAME="overheard"
 APP_BINARY_PATH="/usr/local/bin/$APP_NAME"
 SERVICE_NAME="$APP_NAME.service"
 SERVICE_FILE_PATH="/etc/systemd/system/$SERVICE_NAME"
-USER=$(whoami)
+USER=${SUDO_USER:-$(whoami)}
 
 # --- Check for root privileges ---
 if [ "$EUID" -ne 0 ]; then
-  echo "Please run as root"
+  echo "Please run with sudo"
   exit
 fi
 

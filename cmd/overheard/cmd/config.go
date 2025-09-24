@@ -31,7 +31,16 @@ var configCmd = &cobra.Command{
 
 		if err := v.ReadInConfig(); err != nil {
 			if os.IsNotExist(err) {
-				fmt.Println("Configuration file not found. You can create one using the 'add' command.")
+				fmt.Println("Configuration file not found.")
+				fmt.Printf("You can create a configuration file at '%s'\n", configPath)
+				// check if the directory exists
+				if _, err := os.Stat(filepath.Dir(configPath)); os.IsNotExist(err) {
+					fmt.Printf("Creating directory '%s'\n", filepath.Dir(configPath))
+					err = os.MkdirAll(filepath.Dir(configPath), 0755)
+					if err != nil {
+						return fmt.Errorf("could not create directory: %w", err)
+					}
+				}
 				return nil
 			} else {
 				return fmt.Errorf("could not read configuration file: %w", err)
